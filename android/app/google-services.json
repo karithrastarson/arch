@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "650905587926",
+    "project_id": "arkitektagattin",
+    "storage_bucket": "arkitektagattin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650905587926:android:bbb4dcadec5a2f2eedb977",
+        "android_client_info": {
+          "package_name": "com.example.arch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650905587926-71jv3kiqevglmd5gom8tfvqbumo8674h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4JxJmajlYVadG9uR6OjlfUazLZItWqAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "650905587926-71jv3kiqevglmd5gom8tfvqbumo8674h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

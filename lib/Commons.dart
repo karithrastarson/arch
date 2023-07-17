@@ -1,4 +1,6 @@
 //Entity classes
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Architect {
   final String fullname;
   final String dob;
@@ -24,10 +26,10 @@ class Building {
   final String createdDate;
   final String postalcode;
   final String buildingId;
-  final String profileImageName;
   String profileUrl = "";
+  DocumentReference<Map<String,dynamic>> architectReference;
 
-  Building(this.name, this.createdDate, this.postalcode, this.buildingId, this.profileImageName);
+  Building(this.name, this.createdDate, this.postalcode, this.buildingId, this.architectReference);
 
   factory Building.fromJson(Map<String, dynamic> json, String id)  {
     return Building(
@@ -35,7 +37,7 @@ class Building {
         json['created-date'],
         json['postal-code'],
         id,
-        json['profile-url'] ?? ""
+        json['arkitekt-id']
     );
   }
 }

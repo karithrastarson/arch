@@ -41,13 +41,18 @@ class _ArchitectInfoPageState extends State<ArchitectInfoPage> {
                   future: getBuildings(widget.architectId), // async work
                   builder: (BuildContext context, AsyncSnapshot<List<Building>> snapshot) {
                     switch (snapshot.connectionState) {
-                      case ConnectionState.waiting: return Text('Loading....');
+                      case ConnectionState.waiting: return const Column(
+                        children: [
+                          CircularProgressIndicator(),
+                          Text('Sæki gögn')
+                        ],
+                      );
                       default:
                         if (snapshot.hasError)
                           return Text('Error: ${snapshot.error}');
                         else {
                           if (snapshot.data!.length == 0){
-                            return Text('Engin gögn fundust. Ef þú vilt bæta við gögnum um þennan arkitekt, sendu okkur tölvupóst á karithrastarson@gmail.com', textAlign: TextAlign.center);
+                            return const Text('Engin gögn fundust. Ef þú vilt bæta við gögnum um þennan arkitekt, sendu okkur tölvupóst á karithrastarson@gmail.com', textAlign: TextAlign.center);
                           } else {
                             return Expanded(
                               child: Container(
@@ -69,8 +74,8 @@ class _ArchitectInfoPageState extends State<ArchitectInfoPage> {
                                               child: CachedNetworkImage(
                                                 imageUrl: data.profileUrl,
                                                 imageBuilder: (context, imageProvider) => Image.network(data.profileUrl),
-                                                placeholder: (context, url) => CircularProgressIndicator(),
-                                                errorWidget: (context, url, error) => Image(image: AssetImage('assets/placeholder.jpeg')),
+                                                placeholder: (context, url) => const CircularProgressIndicator(),
+                                                errorWidget: (context, url, error) => const Image(image: AssetImage('assets/placeholder.jpeg')),
                                               ),
                                             ),
                                             Container(
@@ -102,9 +107,10 @@ class _ArchitectInfoPageState extends State<ArchitectInfoPage> {
         for (var building in event.docs) {
           var newBuilding = Building.fromJson(building.data(), building.id);
 
-          if (newBuilding.profileImageName != ""){
-            var ref = FirebaseStorage.instance.ref().child(building.id + "/" +newBuilding.profileImageName);
-            var url = await ref.getDownloadURL();
+          var result = await FirebaseStorage.instance.ref().child(building.id).listAll();
+
+          if (result.items.length > 0){
+            var url = await result.items[0].getDownloadURL();
             newBuilding.profileUrl = url;
           }
 

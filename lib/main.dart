@@ -4,15 +4,51 @@ import 'Commons.dart';
 import 'SearchPage.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await initData();
   runApp(const MyApp());
+}
+
+initData() async {
+  //Uncomment to add buildings programmatically
+
+  /*
+  var collectionRef = FirebaseFirestore.instance.collection('byggingar');
+  //Add new item
+
+  List<Map<String, dynamic>> buildings =
+  [
+    {
+      "name": "Hlyngerði 8",
+      "postal-code": "108",
+      "created-date": "1974-76",
+      "arkitekt-id": FirebaseFirestore.instance.doc("/arkitektar/1")
+    }];
+
+  var nextBuildingId = int.parse(await getNextBuildingId());
+  for(var building in buildings) {
+    var buildingName = building['name'].replaceAll(RegExp('\\s+'), '-');
+    var buildingId = nextBuildingId.toString() + "-" + buildingName;
+    FirebaseStorage.instance.ref().child(buildingId+"/meta").putString("meta");
+    await collectionRef.doc(buildingId).set(building);
+    nextBuildingId++;
+  }
+
+  var systemRef = FirebaseFirestore.instance.collection('system');
+  await systemRef.doc('id-counters').update({'next-building-id': nextBuildingId});
+  */
+}
+
+Future<String> getNextBuildingId() async {
+  var collectionRef = FirebaseFirestore.instance.collection('system');
+  var counters = collectionRef.doc('id-counters').get();
+  var nextBuildingId = await counters.then((value) => value.data()!['next-building-id']);
+  return nextBuildingId.toString();
 }
 
 class MyApp extends StatelessWidget {
@@ -46,11 +82,11 @@ class MyApp extends StatelessWidget {
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.lightGreen),
+            seedColor: Colors.amber),
 
         useMaterial3: true,
       ),
-      home: const StartPage(title: 'Arkitektagáttin Demo'),
+      home: const StartPage(title: 'Arkitektagáttin'),
     );
   }
 }
@@ -64,6 +100,7 @@ class StartPage extends StatefulWidget {
   State<StartPage> createState() => _StartPageState();
 }
 class _StartPageState extends State<StartPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +125,7 @@ class _StartPageState extends State<StartPage> {
               ),
               Container(
                 margin: const EdgeInsets.all(10.0),
-                width:300,
+                width: 300,
                 height: 200,
                 child: ElevatedButton(
                   style: ButtonStyle(
@@ -102,42 +139,46 @@ class _StartPageState extends State<StartPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) =>
-                          const SearchPage(title: "Leita eftir arkitekt", search: SearchType.architect)),
+                      const SearchPage(title: "Leita eftir arkitekt",
+                          search: SearchType.architect)),
                     );
                   },
                   child: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.person, size: 60),
-                      Text('Leita eftir arkitekt',style: TextStyle(fontSize: 24)),
+                      Text('Leita eftir arkitekt',
+                          style: TextStyle(fontSize: 24)),
                     ],
                   ),
                 ),
               ),
               Container(
-                width:300,
+                width: 300,
                 height: 200,
                 margin: const EdgeInsets.all(10.0),
                 child: ElevatedButton(
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                            )
-                        )
-                    ),
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          )
+                      )
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) =>
-                          const SearchPage(title: "Leita eftir byggingu", search: SearchType.building)),
+                      const SearchPage(title: "Leita eftir byggingu",
+                          search: SearchType.building)),
                     );
                   },
                   child: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.house, size: 60),
-                      Text('Leita eftir byggingu', style:TextStyle(fontSize: 24)),
+                      Text('Leita eftir byggingu',
+                          style: TextStyle(fontSize: 24)),
                     ],
                   ),
                 ),
@@ -145,6 +186,7 @@ class _StartPageState extends State<StartPage> {
             ]
         ),
       ),
+
     );
   }
 }

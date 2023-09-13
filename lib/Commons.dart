@@ -4,18 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Architect {
   final String fullname;
   final String dob;
-  final String profileUrl;
   final String architectId;
-  final String uni;
 
-  Architect(this.fullname, this.dob, this.profileUrl, this.uni, this.architectId);
+  Architect(this.fullname, this.dob, this.architectId);
 
   factory Architect.fromJson(Map<String, dynamic> json, String id) {
     return Architect(
         json['fullname'],
         json['dob'],
-        json['profile-url'],
-        json['uni'],
         id
     );
   }

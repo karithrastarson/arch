@@ -86,7 +86,7 @@ class _SearchPageState extends State<SearchPage> {
                     children: architectResultList.map((data){
                       return ListTile(
                         onTap: () {
-                          analytics.logEvent(name: "SearchArchitect", parameters: {"arkitekt": data.fullname, "arkitektId": data.architectId});
+                          analytics.logEvent(name: "SearchArchitect", parameters: {"arkitekt": data!.fullname, "arkitektId": data!.architectId});
                           Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => ArchitectInfoPage(name: data.fullname,dob: data.dob,architectId:data.architectId)));

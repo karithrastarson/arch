@@ -56,7 +56,7 @@ class _BuildingInfoPageState extends State <BuildingInfoPage> {
                                 return Text('Error: ${snapshot.error}');
                               else {
                                 if(snapshot.data == null)
-                                  return const Text('Arkitektinn fanst ekki');
+                                  return const Text('Arkitektinn fannst ekki');
                                 return
                                 InkWell(
                                   child: Text(
@@ -77,7 +77,7 @@ class _BuildingInfoPageState extends State <BuildingInfoPage> {
                 ),
                 Flexible(
                     child: Container(
-                      width:600,
+                      constraints: BoxConstraints(maxWidth: 1200),
                       child: FutureBuilder<List<String>>(
                   future: getImageAssets(), // async work
                   builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
@@ -98,7 +98,9 @@ class _BuildingInfoPageState extends State <BuildingInfoPage> {
                               shrinkWrap: true,
                               padding: const EdgeInsets.all(20.0),
                               children: snapshot.data!.map((data){
-                                return Image.network(data);
+                                return InteractiveViewer(
+                                    clipBehavior: Clip.none,
+                                    child: Image.network(data));
                               }).toList(),
                             );
                           }
